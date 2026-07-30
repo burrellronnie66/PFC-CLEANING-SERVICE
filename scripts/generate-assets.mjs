@@ -177,19 +177,85 @@ function devilDogStandInSvg() {
 </svg>`;
 }
 
+/* ---------------- Character crops from the supplied poster ----------------
+ * The original artwork lives at art/pfc-poster.jpeg (1448×1086). The two
+ * characters are extracted exactly as supplied — cropped, never redrawn or
+ * altered. The only compositing is two flat navy patches over cut-off TEXT
+ * fragments from the poster's left column (background only, characters are
+ * untouched). If the poster file is missing, labeled brand stand-ins are
+ * generated instead so the site still builds.
+ * ------------------------------------------------------------------------ */
+
+const POSTER = "art/pfc-poster.jpeg";
+const NAVY_BG = { r: 2, g: 18, b: 41 }; // sampled poster background
+
+async function navyRect(width, height) {
+  return sharp({ create: { width, height, channels: 3, background: NAVY_BG } })
+    .png()
+    .toBuffer();
+}
+
+async function cropCharacters() {
+  // Marine with mop + red PFC bucket (left poster panel)
+  const marine = await sharp(POSTER)
+    .extract({ left: 455, top: 15, width: 330, height: 753 })
+    .toBuffer();
+  const marinePatched = await sharp(marine)
+    .composite([
+      // cover clipped fragments from the poster's left text column
+      // (gold wing, star, badge edge, "S." and "M." letters) — all in the
+      // background strip left of the character and above the bucket
+      { input: await navyRect(34, 196), left: 0, top: 0 },
+      { input: await navyRect(30, 178), left: 34, top: 0 },
+      { input: await navyRect(52, 354), left: 0, top: 196 },
+    ])
+    .toBuffer();
+  await sharp(marinePatched)
+    .resize(660, 1506, { kernel: "lanczos3" })
+    .png()
+    .toFile("public/images/marine.png");
+  console.log("cropped public/images/marine.png from poster");
+
+  // Devil Dog mascot (top-right poster panel)
+  const dog = await sharp(POSTER)
+    .extract({ left: 802, top: 8, width: 348, height: 398 })
+    .toBuffer();
+  await sharp(dog)
+    .resize(696, 796, { kernel: "lanczos3" })
+    .png()
+    .toFile("public/images/devil-dog.png");
+  console.log("cropped public/images/devil-dog.png from poster");
+}
+
 /* ---------------- Render ---------------- */
 
 await mkdir("public/images", { recursive: true });
 
-const jobs = [
-  ["public/og.png", ogSvg()],
-  ["public/images/marine.png", marineStandInSvg()],
-  ["public/images/devil-dog.png", devilDogStandInSvg()],
-];
+await sharp(Buffer.from(ogSvg()), { density: 96 })
+  .png()
+  .toFile("public/og.png");
+console.log("generated public/og.png");
 
-for (const [file, svg] of jobs) {
-  await sharp(Buffer.from(svg), { density: 96 }).png().toFile(file);
-  console.log("generated", file);
+const { access } = await import("node:fs/promises");
+let havePoster = true;
+try {
+  await access(POSTER);
+} catch {
+  havePoster = false;
+}
+
+if (havePoster) {
+  await cropCharacters();
+} else {
+  console.warn(`${POSTER} not found — generating labeled stand-ins instead`);
+  const jobs = [
+    ["public/images/marine.png", marineStandInSvg()],
+    ["public/images/devil-dog.png", devilDogStandInSvg()],
+  ];
+  for (const [file, svg] of jobs) {
+    await sharp(Buffer.from(svg), { density: 96 }).png().toFile(file);
+    console.log("generated", file);
+  }
 }
 
 /* ---------------- favicon.ico (PNG-in-ICO, from the brand icon) ---------------- */

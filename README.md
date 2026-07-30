@@ -20,24 +20,25 @@ npm run lint     # eslint
 
 ---
 
-## ⚠️ One thing to do before launch: drop in the poster artwork
+## Artwork
 
-The Marine and Devil Dog illustrations from your poster were supplied as a
-visual reference, so the repo currently ships **branded stand-in images** in
-their slots (each one is labeled "ARTWORK SLOT" so it can't be missed).
-Export the two characters from your original artwork file and overwrite:
+The original poster lives at **`art/pfc-poster.jpeg`**. The two character
+images used on the site are cropped from it — never redrawn or altered
+(black hat EGAs and insignia-free sleeves preserved exactly as supplied):
 
-| File | Content | Recommended crop |
+| File | Content | Used in |
 |---|---|---|
-| `public/images/marine.png` | The Marine holding the mop (with red PFC bucket) | Portrait, ~900×1200, transparent or navy background |
-| `public/images/devil-dog.png` | The Devil Dog mascot, arms crossed | Square, ~1000×1000, transparent or navy background |
+| `public/images/marine.png` | The Marine holding the mop, with the red PFC bucket | Hero, About page |
+| `public/images/devil-dog.png` | The Devil Dog mascot, arms crossed | Devil Dog section |
 
-Keep the filenames the same and the site picks them up automatically — hero,
-about page, and mascot section are already wired. Use the artwork exactly as
-supplied: black hat EGAs, no rank insignia on the sleeves, no alterations.
-
-`public/og.png` (the social-sharing card) is a finished, generated brand
-asset — you can keep it or regenerate it with `node scripts/generate-assets.mjs`.
+To re-extract the crops (for example after replacing the poster with a
+higher-resolution export — recommended if you have one, since crops can
+only be as sharp as the source), overwrite `art/pfc-poster.jpeg` and run
+`node scripts/generate-assets.mjs`. The same script regenerates
+`public/og.png` (the social-sharing card) and the favicon. If you ever have
+standalone high-res exports of each character (ideally with transparent
+backgrounds), you can simply overwrite the two files in `public/images/`
+directly — keep the filenames.
 
 ---
 

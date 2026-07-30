@@ -3,13 +3,10 @@ import Image from "next/image";
 /**
  * Branded frame for the supplied PFC artwork (Marine + Devil Dog).
  *
- * IMPORTANT — ARTWORK FILES:
- * Export the characters from your PFC poster art and drop them in:
- *   public/images/marine.png     (the Marine with the mop — portrait crop)
- *   public/images/devil-dog.png  (the Devil Dog mascot — square crop)
- * The branded stand-in images currently in those slots are temporary
- * and should be replaced with the real artwork before launch.
- * Do not alter the characters — use them exactly as supplied.
+ * The character images in public/images/ are cropped — never redrawn
+ * or altered — from the original poster at art/pfc-poster.jpeg.
+ * To re-extract them (or after replacing the poster with a higher-res
+ * version), run:  node scripts/generate-assets.mjs
  */
 export function ArtSlot({
   src,

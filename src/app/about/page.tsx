@@ -123,13 +123,13 @@ export default function AboutPage() {
               </Link>
             </div>
           </Reveal>
-          <Reveal className="mx-auto w-full max-w-sm" delay={120}>
+          <Reveal className="mx-auto w-full max-w-[18rem]" delay={120}>
             <ArtSlot
               src="/images/marine.png"
               alt="PFC Cleaning Service Marine in desert camouflage holding a mop beside a red PFC cleaning bucket"
-              width={900}
-              height={1200}
-              sizes="(min-width: 1024px) 24rem, 85vw"
+              width={660}
+              height={1506}
+              sizes="(min-width: 640px) 18rem, 70vw"
             />
           </Reveal>
         </div>

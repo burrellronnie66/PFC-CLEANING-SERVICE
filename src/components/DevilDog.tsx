@@ -52,8 +52,8 @@ export function DevilDog() {
           <ArtSlot
             src="/images/devil-dog.png"
             alt="PFC Cleaning Service Devil Dog mascot — a bulldog in desert camouflage with arms crossed"
-            width={1000}
-            height={1000}
+            width={696}
+            height={796}
             float
             sizes="(min-width: 1024px) 24rem, 85vw"
           />

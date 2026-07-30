@@ -100,7 +100,7 @@ export function Hero() {
 
         {/* Artwork */}
         <div
-          className="hero-rise relative mx-auto w-full max-w-sm lg:max-w-md"
+          className="hero-rise relative mx-auto w-full max-w-[16rem] sm:max-w-[18rem] lg:max-w-[20rem]"
           style={{ animationDelay: "200ms" }}
         >
           {/* Gold corner accents */}
@@ -115,10 +115,10 @@ export function Hero() {
           <ArtSlot
             src="/images/marine.png"
             alt="PFC Cleaning Service Marine in desert camouflage holding a mop beside a red PFC cleaning bucket"
-            width={900}
-            height={1200}
+            width={660}
+            height={1506}
             preload
-            sizes="(min-width: 1024px) 28rem, (min-width: 640px) 24rem, 90vw"
+            sizes="(min-width: 1024px) 20rem, (min-width: 640px) 18rem, 16rem"
           />
         </div>
       </div>
