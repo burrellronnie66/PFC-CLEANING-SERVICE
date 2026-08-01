@@ -62,21 +62,24 @@ Everything editable lives in **`src/config/site.ts`**:
 
 ## Connecting the quote form
 
-The form at `/quote` posts to `src/app/api/quote/route.ts`. Delivery is
-controlled by environment variables — see **`.env.example`** for the full
-reference. Options:
+The form at `/quote` posts to `src/app/api/quote/route.ts` — this is the
+single lead pipeline for the site (every "Book Your Clean" button routes to
+it). **Delivery is live via Formspree** — the form ID is set in
+`src/config/site.ts`, and the recipient email is managed inside your
+Formspree dashboard, never in this repo.
+
+To switch providers later, set environment variables (see
+**`.env.example`**):
 
 | Provider | Set | Good for |
 |---|---|---|
-| `log` (default) | nothing | Works out of the box; requests print to the server log |
-| `formspree` | `QUOTE_FORMSPREE_ID` | Easiest email delivery |
+| `formspree` (current) | nothing — configured in `src/config/site.ts` | Easiest email delivery |
 | `resend` | `QUOTE_RESEND_API_KEY`, `QUOTE_TO_EMAIL`, `QUOTE_FROM_EMAIL` | Email from your own domain |
 | `webhook` | `QUOTE_WEBHOOK_URL` | **GoHighLevel**, Zapier, Make, or any CRM with an inbound webhook |
+| `log` | `QUOTE_PROVIDER=log` | Testing; requests print to the server log only |
 
-The recipient email is intentionally never hardcoded in the repo — set
-`QUOTE_TO_EMAIL` (or configure it inside Formspree/GoHighLevel) when you're
-ready. Spam is filtered with a honeypot field; all fields are validated on
-both client and server.
+Spam is filtered with a honeypot field; all fields are validated on both
+client and server.
 
 ---
 

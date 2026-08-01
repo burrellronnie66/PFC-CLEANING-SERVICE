@@ -79,23 +79,31 @@ export const site = {
 
   /**
    * QUOTE FORM DELIVERY — see src/app/api/quote/route.ts for the
-   * full wiring. The recipient email is intentionally NOT hardcoded
-   * here; set it with the QUOTE_TO_EMAIL environment variable so it
-   * never lives in the public repo.
+   * full wiring. Every "Book Your Clean" button and "Request a
+   * Quote" link leads to the same form, so this is the single lead
+   * pipeline for the whole site.
    */
   quoteForm: {
     /**
      * Delivery provider for quote requests:
-     *  "log"       — no external service; requests print to the server log (default until configured)
-     *  "formspree" — set QUOTE_FORMSPREE_ID env var (e.g. "abcdwxyz" from https://formspree.io)
+     *  "formspree" — delivers via https://formspree.io (current setup)
      *  "resend"    — set QUOTE_RESEND_API_KEY + QUOTE_TO_EMAIL env vars (https://resend.com)
      *  "webhook"   — set QUOTE_WEBHOOK_URL env var (GoHighLevel inbound webhook, Zapier, Make, any CRM)
+     *  "log"       — no external service; requests only print to the server log
+     * The QUOTE_PROVIDER env var overrides this default.
      */
-    provider: (process.env.QUOTE_PROVIDER ?? "log") as
+    provider: (process.env.QUOTE_PROVIDER ?? "formspree") as
       | "log"
       | "formspree"
       | "resend"
       | "webhook",
+    /**
+     * Formspree form ID (the part after /f/ in your endpoint URL —
+     * https://formspree.io/f/mjgnqpjj). Form IDs are public by design;
+     * the QUOTE_FORMSPREE_ID env var overrides this if you ever rotate
+     * forms without a code change.
+     */
+    formspreeId: process.env.QUOTE_FORMSPREE_ID ?? "mjgnqpjj",
   },
 
   /**

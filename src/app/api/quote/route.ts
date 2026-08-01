@@ -12,12 +12,12 @@ import { getService, site } from "@/config/site";
  *
  *   QUOTE_PROVIDER = "log" | "formspree" | "resend" | "webhook"
  *
- * 1) "log" (default) — no external service yet. Requests are
- *    printed to the server log so the site works out of the box.
+ * 1) "formspree" (current default, set in src/config/site.ts) —
+ *    delivers to the Formspree form configured there. Override the
+ *    form with QUOTE_FORMSPREE_ID if you rotate endpoints.
  *
- * 2) "formspree" — easiest email delivery, no code changes:
- *      QUOTE_PROVIDER=formspree
- *      QUOTE_FORMSPREE_ID=yourFormId      (from https://formspree.io)
+ * 2) "log" — no external service. Requests are printed to the
+ *    server log only (useful while testing).
  *
  * 3) "resend" — transactional email via https://resend.com:
  *      QUOTE_PROVIDER=resend
@@ -113,8 +113,8 @@ export async function POST(request: Request) {
   try {
     switch (provider) {
       case "formspree": {
-        const formId = process.env.QUOTE_FORMSPREE_ID;
-        if (!formId) throw new Error("QUOTE_FORMSPREE_ID is not set");
+        const formId = site.quoteForm.formspreeId;
+        if (!formId) throw new Error("Formspree form ID is not configured");
         const res = await fetch(`https://formspree.io/f/${formId}`, {
           method: "POST",
           headers: {
